@@ -1,3 +1,3 @@
-public interface Transformable {
+public interface ITransformable {
     void transform(double size);
 }

@@ -17,8 +17,8 @@ public class Circle extends Figure  {
     }
 
     private Coordinate calculateCentre() {
-        double x = coordinates.get(1).getX()-coordinates.get(0).getX();
-        double y = coordinates.get(1).getY()-coordinates.get(0).getY();
+        double x = coordinates.get(0).getX() + (coordinates.get(1).getX()-coordinates.get(0).getX())/2;
+        double y = coordinates.get(0).getY() + (coordinates.get(1).getY()-coordinates.get(0).getY())/2;
         return new Coordinate(x,y);
     }
 

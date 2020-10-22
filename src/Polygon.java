@@ -13,18 +13,16 @@ public class Polygon extends Figure {
 
     @Override
     public void transform(double size) {
-        ArrayList<Coordinate> newCoordinates = new ArrayList<>();
         Coordinate startCoordinate = coordinates.get(0);
         double startX = startCoordinate.getX();
         double startY = startCoordinate.getY();
-        newCoordinates.add(startCoordinate);
         for (int i = 1; i < coordinates.size(); i++) {
-            double x = coordinates.get(i).getX();
-            double y = coordinates.get(i).getY();
-            newCoordinates.add(new Coordinate((x-startX)*size,(y-startY)*size));
+            double x = (coordinates.get(i).getX()-startX)*size + startX;
+            double y = (coordinates.get(i).getY()-startY)*size + startY;
+            coordinates.get(i).setX(x);
+            coordinates.get(i).setY(y);
         }
-        coordinates.clear();
-        coordinates = newCoordinates;
+
     }
 
 

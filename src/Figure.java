@@ -1,8 +1,7 @@
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Formatter;
 
-public abstract class Figure implements Turnable, Movable, Transformable {
+public abstract class Figure implements ITurnable, IMovable, ITransformable {
 ArrayList <Coordinate> coordinates;
 String name;
 DecimalFormat decimalFormat = new DecimalFormat("#.###");
@@ -42,14 +41,13 @@ DecimalFormat decimalFormat = new DecimalFormat("#.###");
 
     @Override
     public void turn(double angle) {
-        ArrayList <Coordinate> newCoordinates = new ArrayList<>();
+        double radians = Math.toRadians(angle);
         for (Coordinate coordinate : coordinates) {
-            double x = (coordinate.getX() + Math.cos(angle) - coordinate.getY() * Math.sin(angle));
-            double y = (coordinate.getX() + Math.sin(angle) + coordinate.getY() * Math.cos(angle));
-            newCoordinates.add(new Coordinate(x, y));
+            double x = (coordinate.getX()*Math.cos(radians) - coordinate.getY() * Math.sin(radians));
+            double y = (coordinate.getX()*Math.sin(radians) + coordinate.getY() * Math.cos(radians));
+            coordinate.setX(x);
+            coordinate.setY(y);
         }
-        coordinates.clear();
-        coordinates=newCoordinates;
 
     }
 

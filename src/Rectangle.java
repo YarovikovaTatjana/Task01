@@ -13,15 +13,6 @@ public class Rectangle extends Figure {
 
     }
 
-    private void setCoordinates(Coordinate coordinate, double length, double hight) {
-        coordinates.clear();
-        coordinates.add(0, coordinate);
-        coordinates.add(1, new Coordinate(coordinate.getX()+length,coordinate.getY()));
-        coordinates.add(2, new Coordinate(coordinate.getX()+length,coordinate.getY()+hight));
-        coordinates.add(3, new Coordinate(coordinate.getX(),coordinate.getY()+hight));
-        this.length = length;
-        this.hight = hight;
-    }
 
     @Override
     public double calculateArea() {
@@ -31,7 +22,18 @@ public class Rectangle extends Figure {
 
     @Override
     public void transform(double size) {
-    setCoordinates(coordinates.get(0), (length*size),(hight*size));
+        Coordinate startCoordinate = coordinates.get(0);
+        double startX = startCoordinate.getX();
+        double startY = startCoordinate.getY();
+        for (int i = 1; i < coordinates.size(); i++) {
+            double x = (coordinates.get(i).getX()-startX)*size + startX;
+            double y = (coordinates.get(i).getY()-startY)*size + startY;
+            coordinates.get(i).setX(x);
+            coordinates.get(i).setY(y);
+        }
+        this.length = length*size;
+        this.hight = hight*size;
+
     }
 
 
