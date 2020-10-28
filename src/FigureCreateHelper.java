@@ -3,17 +3,28 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class FigureCreateHelper {
-   private static ConsoleHelper consoleHelper = new ConsoleHelper();
+    final static String FILENAME = "Figure.txt";
+
+
+    static Figure createCopyFigure(Figure figure){
+        ArrayList<Coordinate> copyCoordinates = new ArrayList<>();
+        for (int i = 0; i < figure.getCoordinates().size(); i++) {
+            copyCoordinates.add(new Coordinate(figure.getCoordinates().get(i).getX(),figure.getCoordinates().get(i).getY()));
+        }
+        FigureFactory figureFactory = getFigureFactory(copyCoordinates);
+        return figureFactory.createFigure(copyCoordinates);
+    }
 
 
     public static ArrayList<Figure> getFiguresByFile() {
         ArrayList<Figure> figures = new ArrayList<>();
         FigureFactory figureFactory;
-        try (BufferedReader reader = new BufferedReader(new FileReader("Figure.txt"))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILENAME))){
             while (reader.ready()) {
                 String parametr1 = reader.readLine();
                 ArrayList <Coordinate> coordinates = receiveCoordinates(parametr1.split(";"));
@@ -25,12 +36,28 @@ public class FigureCreateHelper {
             System.out.println("File not found");
         }
         catch (IOException e){
-            System.out.println("Исключение " + e);
+            e.printStackTrace();
         }
         return figures;
     }
 
-    public static Figure getFigureByConsole(){
+    static ArrayList<Figure> getFiguresByFileHelper(ArrayList<String> lines) {
+        ArrayList<Figure> figures = new ArrayList<>();
+        FigureFactory figureFactory;
+        try {
+            for (String line : lines) {
+                ArrayList<Coordinate> coordinates = receiveCoordinates(line.split(";"));
+                figureFactory = getFigureFactory(coordinates);
+                figures.add(figureFactory.createFigure(coordinates));
+            }
+        }
+        catch (InputMismatchException e){
+            e.printStackTrace();
+        }
+        return figures;
+    }
+
+    static Figure getFigureByConsole(){
         ArrayList <Coordinate> coordinates = userCoordinates();
         FigureFactory figureFactory = getFigureFactory(coordinates);
         return figureFactory.createFigure(coordinates);
@@ -60,11 +87,11 @@ public class FigureCreateHelper {
         ArrayList<Coordinate> coordinates = new ArrayList<>();
         for (String parametr : parametrs) {
             try (Scanner scanner = new Scanner(parametr)) {
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
+                double x = scanner.nextDouble();
+                double y = scanner.nextDouble();
                 coordinates.add(new Coordinate(x, y));
             } catch (InputMismatchException e) {
-                System.out.println("InputMismatchException");
+
             }
         }
         return coordinates;
@@ -80,7 +107,7 @@ public class FigureCreateHelper {
             }
             else {
                 System.out.println("Ввести еще одну координату? Y/N");
-                switch (consoleHelper.readString()) {
+                switch (ConsoleHelper.readString()) {
                     case "Y":
                         userCoordinates.add(getUserCoordinate());
                         break;
@@ -99,10 +126,13 @@ public class FigureCreateHelper {
     }
 
     private static Coordinate getUserCoordinate() {
-        double x = consoleHelper.readDouble();
-        double y = consoleHelper.readDouble();
+        System.out.println("Введите х: ");
+        double x = ConsoleHelper.readDouble();
+        System.out.println("Введите y: ");
+        double y = ConsoleHelper.readDouble();
         System.out.println("Координата добавлена");
         return new Coordinate(x,y);
     }
+
 
 }

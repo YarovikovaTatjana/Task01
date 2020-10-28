@@ -21,13 +21,13 @@ class ConsoleHelper {
         }
         catch (NumberFormatException e){
             System.out.println("Произошла ошибка при попытке ввода числа. Попробуйте еще раз.");
-            return Double.parseDouble(readString());
+            return readDouble();
         }
     }
 
     static double readDouble(int min){
         try{
-            double readDouble = Double.parseDouble(readString());
+            double readDouble =readDouble();
             if (readDouble>(double) min) return readDouble;
             else {
                 System.out.println("Введенное значение должно быть больше " + min);
@@ -36,7 +36,7 @@ class ConsoleHelper {
         }
         catch (NumberFormatException e){
             System.out.println("Произошла ошибка при попытке ввода числа. Попробуйте еще раз.");
-            return Double.parseDouble(readString());
+            return readDouble(min);
         }
     }
 
@@ -46,13 +46,13 @@ class ConsoleHelper {
         }
         catch (NumberFormatException e){
             System.out.println("Произошла ошибка при попытке ввода числа. Попробуйте еще раз.");
-            return Integer.parseInt(readString());
+            return readInt();
         }
     }
 
     static int readInt(int min){
         try{
-            int readInt = Integer.parseInt(readString());
+            int readInt = readInt();
             if (readInt>min) return readInt;
             else {
                 System.out.println("Введенное значение должно быть больше " + min);
@@ -67,7 +67,7 @@ class ConsoleHelper {
 
     static int readInt(int min, int max){
         try{
-            int readInt = Integer.parseInt(readString());
+            int readInt = readInt();
             if (readInt>min && readInt<max) return readInt;
             else {
                 System.out.println("Введенное значение должно быть в диапазоне от " + min + " до " + max);

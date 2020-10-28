@@ -18,7 +18,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#.###");
         sum2=sum2+coordinates.get(i).getY()*coordinates.get(i+1).getX();
     }
 
-        return (sum1+sum2)/2.0;
+        return Math.abs(sum1-sum2)/2.0;
 }
 
     @Override
@@ -33,6 +33,20 @@ DecimalFormat decimalFormat = new DecimalFormat("#.###");
 
     String getName() {
         return name;
+    }
+
+    ArrayList<Coordinate> getCoordinates() {
+        return coordinates;
+    }
+
+    String getCoordinatesToString(){
+        StringBuilder tempCoordinates  = new StringBuilder();
+        for (int i = 0; i < coordinates.size(); i++) {
+            tempCoordinates.append(coordinates.get(i).getX()).append(" ").append(coordinates.get(i).getY());
+            if (i<coordinates.size()-1) tempCoordinates.append(";");
+        }
+
+        return tempCoordinates.toString().replace(".", ",");
     }
 
     double calculateLine(Coordinate coordinate1, Coordinate coordinate2){

@@ -16,6 +16,8 @@ public class Circle extends Figure  {
 
     }
 
+
+
     private Coordinate calculateCentre() {
         double x = coordinates.get(0).getX() + (coordinates.get(1).getX()-coordinates.get(0).getX())/2;
         double y = coordinates.get(0).getY() + (coordinates.get(1).getY()-coordinates.get(0).getY())/2;
@@ -34,12 +36,20 @@ public class Circle extends Figure  {
     @Override
     public void transform(double size) {
        setRadius(this.radius*size);
+       coordinates.get(0).setX(centre.getX()-radius);
+       coordinates.get(1).setX(centre.getX()+radius);
     }
 
     @Override
     public void move(int distanceX, int distanceY) {
         this.centre.setX(this.centre.getX()+distanceX);
         this.centre.setY(this.centre.getY()+distanceY);
+        for (Coordinate coordinate : coordinates) {
+            coordinate.setX(coordinate.getX() + distanceX);
+            coordinate.setY(coordinate.getY() + distanceY);
+
+        }
+
     }
 
     @Override
