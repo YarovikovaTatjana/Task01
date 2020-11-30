@@ -1,9 +1,14 @@
+package helper;
+
+import factory.*;
+import model.coordinate.Coordinate;
+import model.figure.Figure;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -11,7 +16,7 @@ public class FigureCreateHelper {
     final static String FILENAME = "Figure.txt";
 
 
-    static Figure createCopyFigure(Figure figure){
+  public static Figure createCopyFigure(Figure figure){
         ArrayList<Coordinate> copyCoordinates = new ArrayList<>();
         for (int i = 0; i < figure.getCoordinates().size(); i++) {
             copyCoordinates.add(new Coordinate(figure.getCoordinates().get(i).getX(),figure.getCoordinates().get(i).getY()));
@@ -28,8 +33,10 @@ public class FigureCreateHelper {
             while (reader.ready()) {
                 String parametr1 = reader.readLine();
                 ArrayList <Coordinate> coordinates = receiveCoordinates(parametr1.split(";"));
-                figureFactory = getFigureFactory(coordinates);
-                figures.add(figureFactory.createFigure(coordinates));
+                if (coordinates.size()>1) {
+                    figureFactory = getFigureFactory(coordinates);
+                    figures.add(figureFactory.createFigure(coordinates));
+                }
             }
         }
         catch (FileNotFoundException e){
@@ -41,14 +48,16 @@ public class FigureCreateHelper {
         return figures;
     }
 
-    static ArrayList<Figure> getFiguresByFileHelper(ArrayList<String> lines) {
+    public static ArrayList<Figure> getFiguresByFileHelper(ArrayList<String> lines) {
         ArrayList<Figure> figures = new ArrayList<>();
         FigureFactory figureFactory;
         try {
             for (String line : lines) {
                 ArrayList<Coordinate> coordinates = receiveCoordinates(line.split(";"));
-                figureFactory = getFigureFactory(coordinates);
-                figures.add(figureFactory.createFigure(coordinates));
+                if (coordinates.size()>1) {
+                    figureFactory = getFigureFactory(coordinates);
+                    figures.add(figureFactory.createFigure(coordinates));
+                }
             }
         }
         catch (InputMismatchException e){
@@ -57,7 +66,7 @@ public class FigureCreateHelper {
         return figures;
     }
 
-    static Figure getFigureByConsole(){
+    public static Figure getFigureByConsole(){
         ArrayList <Coordinate> coordinates = userCoordinates();
         FigureFactory figureFactory = getFigureFactory(coordinates);
         return figureFactory.createFigure(coordinates);
@@ -65,20 +74,20 @@ public class FigureCreateHelper {
 
     private static FigureFactory getFigureFactory(ArrayList<Coordinate> coordinates) {
         FigureFactory figureFactory;
-        switch (coordinates.size()){
-            case 2:
-                figureFactory = new CircleFactory();
-                break;
-            case 3:
-                figureFactory = new TriangleFactory();
-                break;
-            case 4:
-                figureFactory = new RectangleFactory();
-                break;
-            default:
-                figureFactory = new PolygonFactory();
-                break;
-        }
+            switch (coordinates.size()) {
+                case 2:
+                    figureFactory = new CircleFactory();
+                    break;
+                case 3:
+                    figureFactory = new TriangleFactory();
+                    break;
+                case 4:
+                    figureFactory = new RectangleFactory();
+                    break;
+                default:
+                    figureFactory = new PolygonFactory();
+                    break;
+            }
         return figureFactory;
     }
 

@@ -1,15 +1,17 @@
-import java.text.DecimalFormat;
+package model.figure;
+
+import model.coordinate.Coordinate;
+
 import java.util.ArrayList;
 
-public class Circle extends Figure  {
+public class Circle extends Figure {
    private double radius;
    private Coordinate centre;
 
 
 
-    Circle(ArrayList<Coordinate> coordinates) {
+    public Circle(ArrayList<Coordinate> coordinates) {
         super(coordinates);
-        this.name = "Окружность";
         this.coordinates = coordinates;
         this.radius=calculateLine(coordinates.get(0),coordinates.get(1))/2;
         this.centre = calculateCentre();
@@ -55,6 +57,10 @@ public class Circle extends Figure  {
     @Override
     public void turn(double angle) {
         System.out.println("Вращение окружности не производится");
+    }
+
+    public String getName() {
+        return TypeFigure.valueOf(this.getClass().getSimpleName()).toString();
     }
 
     @Override

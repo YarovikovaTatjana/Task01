@@ -1,3 +1,9 @@
+package factory;
+
+import model.coordinate.Coordinate;
+import model.figure.Circle;
+import model.figure.Figure;
+
 import java.util.ArrayList;
 
 public class CircleFactory implements FigureFactory {

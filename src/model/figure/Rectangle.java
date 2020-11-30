@@ -1,3 +1,7 @@
+package model.figure;
+
+import model.coordinate.Coordinate;
+
 import java.util.ArrayList;
 
 public class Rectangle extends Figure {
@@ -5,12 +9,10 @@ public class Rectangle extends Figure {
     private double hight;
 
 
-    Rectangle(ArrayList<Coordinate> coordinates) {
+    public Rectangle(ArrayList<Coordinate> coordinates) {
         super(coordinates);
         this.length =  calculateLine(coordinates.get(0),coordinates.get(1));
         this.hight =  calculateLine(coordinates.get(1),coordinates.get(2));
-        this.name = (this.length!=hight) ? "Прямогугольник" : "Квадрат";
-
     }
 
 
@@ -36,7 +38,9 @@ public class Rectangle extends Figure {
 
     }
 
-
+    public String getName() {
+        return TypeFigure.valueOf(this.getClass().getSimpleName()).toString();
+    }
 
     @Override
     public String toString() {

@@ -1,10 +1,14 @@
+package model.figure;
+
+import model.coordinate.Coordinate;
+
 import java.util.ArrayList;
 
 public class Polygon extends Figure {
-    Polygon(ArrayList<Coordinate> coordinates) {
+    public Polygon(ArrayList<Coordinate> coordinates) {
         super(coordinates);
-        this.name = "Многоугольник c " + coordinates.size() + " углами";
     }
+
 
     @Override
     public void move(int distanceX, int distanceY) {
@@ -24,6 +28,8 @@ public class Polygon extends Figure {
         }
 
     }
-
+    public String getName() {
+        return TypeFigure.valueOf(this.getClass().getSimpleName()).toString();
+    }
 
 }

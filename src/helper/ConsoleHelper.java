@@ -1,11 +1,13 @@
+package helper;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-class ConsoleHelper {
+public class ConsoleHelper {
     private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-    static String readString(){
+    public static String readString(){
         try{
             return bufferedReader.readLine();
         }
@@ -15,7 +17,7 @@ class ConsoleHelper {
         }
     }
 
-    static double readDouble(){
+   public static double readDouble(){
         try{
             return Double.parseDouble(readString());
         }
@@ -25,7 +27,7 @@ class ConsoleHelper {
         }
     }
 
-    static double readDouble(int min){
+   public static double readDouble(int min){
         try{
             double readDouble =readDouble();
             if (readDouble>(double) min) return readDouble;
@@ -40,7 +42,7 @@ class ConsoleHelper {
         }
     }
 
-    static int readInt(){
+   public static int readInt(){
         try{
             return Integer.parseInt(readString());
         }
@@ -50,7 +52,7 @@ class ConsoleHelper {
         }
     }
 
-    static int readInt(int min){
+   public static int readInt(int min){
         try{
             int readInt = readInt();
             if (readInt>min) return readInt;
@@ -65,7 +67,7 @@ class ConsoleHelper {
         }
     }
 
-    static int readInt(int min, int max){
+   public static int readInt(int min, int max){
         try{
             int readInt = readInt();
             if (readInt>min && readInt<max) return readInt;

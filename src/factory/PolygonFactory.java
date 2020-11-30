@@ -1,3 +1,9 @@
+package factory;
+
+import model.coordinate.Coordinate;
+import model.figure.Figure;
+import model.figure.Polygon;
+
 import java.util.ArrayList;
 
 public class PolygonFactory  implements FigureFactory {

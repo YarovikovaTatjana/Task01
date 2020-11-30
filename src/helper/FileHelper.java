@@ -1,16 +1,15 @@
-import java.io.FileNotFoundException;
+package helper;
+
+import model.figure.Figure;
+
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Iterator;
-import java.util.List;
 
-class FileHelper {
+public class FileHelper {
 
   private static ArrayList<String> lines;
   private static Path fileWithFigures;
@@ -24,7 +23,7 @@ class FileHelper {
         }
     }
 
-    static void replaceFigureInFile (Figure startFigure, Figure newFigure){
+    public static void replaceFigureInFile (Figure startFigure, Figure newFigure){
          String targetLine = startFigure.getCoordinatesToString();
          String newValue = newFigure.getCoordinatesToString();
         for (int i = 0; i < lines.size(); i++) {
@@ -39,11 +38,11 @@ class FileHelper {
         }
     }
 
-    static ArrayList<Figure> getAllFigiresInFile()   {
+    public static ArrayList<Figure> getAllFigiresInFile()   {
        return FigureCreateHelper.getFiguresByFileHelper(lines);
     }
 
-    static void AllFiguresInFileToString() {
+    public static void AllFiguresInFileToString() {
           ArrayList<Figure> figures = getAllFigiresInFile();
           for (Figure figure : figures) {
               System.out.println(figure.getName() + "\n" + figure.toString());
@@ -52,14 +51,8 @@ class FileHelper {
 
     }
 
-    static void removeFigureInFile(Figure figure){
-        Iterator<String> iterator = lines.iterator();
-        while (iterator.hasNext()) {
-           String line = iterator.next();
-            if (line.equals(figure.getCoordinatesToString())) {
-                iterator.remove();
-            }
-        }
+    public static void removeFigureInFile(Figure figure){
+        lines.removeIf(line -> line.equals(figure.getCoordinatesToString()));
         try {
             Files.write(fileWithFigures, lines);
         } catch (IOException e) {
@@ -67,7 +60,7 @@ class FileHelper {
         }
     }
 
-    static void addFigureInFile(Figure figure){
+    public static void addFigureInFile(Figure figure){
         try {
             lines.add(figure.getCoordinatesToString());
             Files.write(fileWithFigures, lines);

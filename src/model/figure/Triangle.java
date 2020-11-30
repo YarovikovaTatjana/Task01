@@ -1,3 +1,7 @@
+package model.figure;
+
+import model.coordinate.Coordinate;
+
 import java.util.ArrayList;
 
 public class Triangle extends Figure {
@@ -5,12 +9,13 @@ public class Triangle extends Figure {
    private double line2;
 
 
-    Triangle(ArrayList<Coordinate> coordinates) {
+    public Triangle(ArrayList<Coordinate> coordinates) {
         super(coordinates);
-        this.name="Треугольник";
         this.line1=calculateLine(coordinates.get(0),coordinates.get(1));
         this.line2=calculateLine(coordinates.get(0),coordinates.get(2));
     }
+
+
 
     @Override
     public double calculateArea() {
@@ -24,6 +29,8 @@ public class Triangle extends Figure {
         coordinates.get(2).setY(coordinates.get(2).getY()+ (line2*size));
     }
 
-
+    public String getName() {
+        return TypeFigure.valueOf(this.getClass().getSimpleName()).toString();
+    }
 
 }

@@ -1,12 +1,18 @@
+package model.figure;
+
+import interfaces.IMovable;
+import interfaces.ITransformable;
+import interfaces.ITurnable;
+import model.coordinate.Coordinate;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public abstract class Figure implements ITurnable, IMovable, ITransformable {
 ArrayList <Coordinate> coordinates;
-String name;
 DecimalFormat decimalFormat = new DecimalFormat("#.###");
 
-    Figure(ArrayList<Coordinate> coordinates) {
+  public Figure(ArrayList<Coordinate> coordinates) {
         this.coordinates = coordinates;
     }
 
@@ -31,15 +37,11 @@ DecimalFormat decimalFormat = new DecimalFormat("#.###");
         }
     }
 
-    String getName() {
-        return name;
-    }
-
-    ArrayList<Coordinate> getCoordinates() {
+    public ArrayList<Coordinate> getCoordinates() {
         return coordinates;
     }
 
-    String getCoordinatesToString(){
+    public String getCoordinatesToString(){
         StringBuilder tempCoordinates  = new StringBuilder();
         for (int i = 0; i < coordinates.size(); i++) {
             tempCoordinates.append(coordinates.get(i).getX()).append(" ").append(coordinates.get(i).getY());
@@ -49,7 +51,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#.###");
         return tempCoordinates.toString().replace(".", ",");
     }
 
-    double calculateLine(Coordinate coordinate1, Coordinate coordinate2){
+    public double calculateLine(Coordinate coordinate1, Coordinate coordinate2){
     return (Math.pow(Math.pow(coordinate2.getX()-coordinate1.getX(),2)+Math.pow(coordinate2.getY()-coordinate1.getY(),2),0.5));
     }
 
@@ -64,6 +66,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#.###");
         }
 
     }
+    public abstract String getName();
 
     @Override
     public String toString() {

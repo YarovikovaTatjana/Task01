@@ -1,3 +1,9 @@
+package factory;
+
+import model.coordinate.Coordinate;
+import model.figure.Figure;
+import model.figure.Rectangle;
+
 import java.util.ArrayList;
 
 public class RectangleFactory  implements FigureFactory {
