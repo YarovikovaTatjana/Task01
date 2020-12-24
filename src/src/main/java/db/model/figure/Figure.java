@@ -1,20 +1,61 @@
-package model.figure;
+package db.model.figure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import db.model.coordinate.Coordinate;
 import interfaces.IMovable;
 import interfaces.ITransformable;
 import interfaces.ITurnable;
-import model.coordinate.Coordinate;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, property="type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value= Circle.class, name= "Circle"),
+        @JsonSubTypes.Type(value = Triangle.class, name = "Triangle"),
+        @JsonSubTypes.Type(value =Rectangle.class, name = "Rectangle"),
+        @JsonSubTypes.Type(value =Polygon.class, name = "Polygon")
+})
+
+@Document(collection="figures")
 public abstract class Figure implements ITurnable, IMovable, ITransformable {
-ArrayList <Coordinate> coordinates;
-DecimalFormat decimalFormat = new DecimalFormat("#.###");
+  @JsonIgnore   @Transient
+    private static final long serialVersionUid = 1L;
+    private  int id;
+    ArrayList <Coordinate> coordinates;
+    TypeFigure typeFigure;
+
+
+
+    @JsonIgnore     @Transient
+    DecimalFormat decimalFormat = new DecimalFormat("#.###");
 
   public Figure(ArrayList<Coordinate> coordinates) {
         this.coordinates = coordinates;
     }
+
+    public Figure() {
+    }
+
+    public Figure (int id, ArrayList<Coordinate> coordinates, TypeFigure typeFigure){
+      this.id = id;
+      this.coordinates = coordinates;
+      this.typeFigure = typeFigure;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+
+    public TypeFigure getTypeFigure() {
+        return typeFigure;
+    }
+
 
     public double calculateArea(){
     double sum1=0;
@@ -41,7 +82,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#.###");
         return coordinates;
     }
 
-    public String getCoordinatesToString(){
+    public String receiveCoordinatesToString(){
         StringBuilder tempCoordinates  = new StringBuilder();
         for (int i = 0; i < coordinates.size(); i++) {
             tempCoordinates.append(coordinates.get(i).getX()).append(" ").append(coordinates.get(i).getY());
@@ -51,7 +92,7 @@ DecimalFormat decimalFormat = new DecimalFormat("#.###");
         return tempCoordinates.toString().replace(".", ",");
     }
 
-    public double calculateLine(Coordinate coordinate1, Coordinate coordinate2){
+    double calculateLine(Coordinate coordinate1, Coordinate coordinate2){
     return (Math.pow(Math.pow(coordinate2.getX()-coordinate1.getX(),2)+Math.pow(coordinate2.getY()-coordinate1.getY(),2),0.5));
     }
 
@@ -66,7 +107,11 @@ DecimalFormat decimalFormat = new DecimalFormat("#.###");
         }
 
     }
-    public abstract String getName();
+    public abstract String receiveName();
+
+  public String receiveType(){
+      return this.getClass().getSimpleName();
+  }
 
     @Override
     public String toString() {

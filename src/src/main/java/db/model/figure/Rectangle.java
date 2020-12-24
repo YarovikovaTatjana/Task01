@@ -1,9 +1,10 @@
-package model.figure;
+package db.model.figure;
 
-import model.coordinate.Coordinate;
+import db.model.coordinate.Coordinate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-
+@Document(collection="figures")
 public class Rectangle extends Figure {
     private double length;
     private double hight;
@@ -15,6 +16,14 @@ public class Rectangle extends Figure {
         this.hight =  calculateLine(coordinates.get(1),coordinates.get(2));
     }
 
+    public Rectangle() {
+    }
+
+    public Rectangle(int id, ArrayList<Coordinate> coordinates, TypeFigure typeFigure) {
+        super(id, coordinates, typeFigure);
+        this.length =  calculateLine(coordinates.get(0),coordinates.get(1));
+        this.hight =  calculateLine(coordinates.get(1),coordinates.get(2));
+    }
 
     @Override
     public double calculateArea() {
@@ -38,7 +47,7 @@ public class Rectangle extends Figure {
 
     }
 
-    public String getName() {
+    public String receiveName() {
         return TypeFigure.valueOf(this.getClass().getSimpleName()).toString();
     }
 

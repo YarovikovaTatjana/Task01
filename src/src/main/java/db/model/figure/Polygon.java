@@ -1,14 +1,22 @@
-package model.figure;
+package db.model.figure;
 
-import model.coordinate.Coordinate;
+import db.model.coordinate.Coordinate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 
+@Document(collection="figures")
 public class Polygon extends Figure {
     public Polygon(ArrayList<Coordinate> coordinates) {
         super(coordinates);
     }
 
+    public Polygon() {
+    }
+
+    public Polygon(int id, ArrayList<Coordinate> coordinates, TypeFigure typeFigure) {
+        super(id, coordinates, typeFigure);
+    }
 
     @Override
     public void move(int distanceX, int distanceY) {
@@ -28,7 +36,7 @@ public class Polygon extends Figure {
         }
 
     }
-    public String getName() {
+    public String receiveName() {
         return TypeFigure.valueOf(this.getClass().getSimpleName()).toString();
     }
 

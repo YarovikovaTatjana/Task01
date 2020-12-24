@@ -1,24 +1,29 @@
-package model.figure;
+package db.model.figure;
 
-import model.coordinate.Coordinate;
+import db.model.coordinate.Coordinate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-
+@Document(collection="figures")
 public class Circle extends Figure {
    private double radius;
    private Coordinate centre;
 
-
+    public Circle(int id, ArrayList<Coordinate> coordinates, TypeFigure typeFigure) {
+        super(id, coordinates, typeFigure);
+        this.radius=calculateLine(coordinates.get(0),coordinates.get(1))/2;
+        this.centre = calculateCentre();
+    }
 
     public Circle(ArrayList<Coordinate> coordinates) {
         super(coordinates);
-        this.coordinates = coordinates;
         this.radius=calculateLine(coordinates.get(0),coordinates.get(1))/2;
         this.centre = calculateCentre();
 
     }
 
-
+    public Circle() {
+    }
 
     private Coordinate calculateCentre() {
         double x = coordinates.get(0).getX() + (coordinates.get(1).getX()-coordinates.get(0).getX())/2;
@@ -59,7 +64,7 @@ public class Circle extends Figure {
         System.out.println("Вращение окружности не производится");
     }
 
-    public String getName() {
+    public String receiveName() {
         return TypeFigure.valueOf(this.getClass().getSimpleName()).toString();
     }
 

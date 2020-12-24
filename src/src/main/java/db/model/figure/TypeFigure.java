@@ -1,4 +1,4 @@
-package model.figure;
+package db.model.figure;
 
 public enum TypeFigure {
     Triangle ("Треугольник"),
@@ -8,7 +8,7 @@ public enum TypeFigure {
 
     private String title;
 
-    TypeFigure(String title) {
+   TypeFigure(String title) {
         this.title = title;
     }
 

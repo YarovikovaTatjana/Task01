@@ -1,8 +1,8 @@
 package helper;
 
+import db.model.figure.*;
 import factory.*;
-import model.coordinate.Coordinate;
-import model.figure.Figure;
+import db.model.coordinate.Coordinate;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -90,6 +90,26 @@ public class FigureCreateHelper {
             }
         return figureFactory;
     }
+
+    public static FigureFactory getFigureFactory(TypeFigure typeFigure) {
+        FigureFactory figureFactory;
+        switch (typeFigure) {
+            case Circle:
+                figureFactory = new CircleFactory();
+                break;
+            case Triangle:
+                figureFactory = new TriangleFactory();
+                break;
+            case Rectangle:
+                figureFactory = new RectangleFactory();
+                break;
+            default:
+                figureFactory = new PolygonFactory();
+                break;
+        }
+        return figureFactory;
+    }
+
 
 
     private static ArrayList<Coordinate> receiveCoordinates(String[] parametrs) {
