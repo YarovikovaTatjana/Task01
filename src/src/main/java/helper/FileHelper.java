@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FileHelper {
 
@@ -51,6 +52,7 @@ public class FileHelper {
     }
 
     public static void AllFiguresToString(ArrayList<Figure> figures) {
+        Collections.sort(figures,Figure.COMPARE_BY_ID);
         for (Figure figure : figures) {
             System.out.println(figure.receiveName() + "\n" + figure.toString());
         }

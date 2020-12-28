@@ -9,11 +9,17 @@ import db.model.figure.Figure;
 import org.bson.Document;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.mongodb.client.model.Updates.set;
 
 public class FigureRepositoryCustom  {
  static MongoDB db = new MongoDB();
  static ConverterToDBObject converterD = new ConverterToDBObject();
  static ConverterToFigure converterF = new ConverterToFigure();
+
+
 
 
 static public ArrayList<Figure> findAll() {
@@ -24,6 +30,7 @@ static public ArrayList<Figure> findAll() {
             Figure figure = converterF.convert(figuresDB.get(i));
             figuresFromDB.add(figure);
         }
+
     db.disconnectDB();
         return figuresFromDB;
     }
@@ -57,20 +64,32 @@ static public ArrayList<Figure> findAll() {
 
 
  static public void update(Integer id, Figure figure) {
-     Document startFigure = findDocById(id);
+     db.connectDB();
      Document newFigure = converterD.convertDoc(figure);
-     db.getCollection().updateOne(startFigure,newFigure);
+     db.getCollection().updateOne(new BasicDBObject("id", id), set("coordinates", newFigure.get("coordinates")));
      db.disconnectDB();
 
+    }
+
+    static public void updateId(Integer id, Integer newId) {
+        db.connectDB();
+        db.getCollection().updateOne(new BasicDBObject("id", id), set("id", newId));
+        db.disconnectDB();
     }
 
 
   static public void delete(Integer id) {
        Document result =  findDocById(id);
+       db.connectDB();
         db.getCollection().deleteOne(result);
       db.disconnectDB();
     }
 
-
+    static public int findCountDoc(){
+        db.connectDB();
+        long l = db.getCollection().countDocuments();
+        db.disconnectDB();
+        return (int)l;
+    }
 
 }

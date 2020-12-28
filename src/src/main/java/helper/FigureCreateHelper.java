@@ -143,6 +143,12 @@ public class FigureCreateHelper {
                     case "N":
                         isExit = true;
                         break;
+                    case "y":
+                        userCoordinates.add(getUserCoordinate());
+                        break;
+                    case "n":
+                        isExit = true;
+                        break;
                     default:
                         System.out.println("Введено некорректное значение");
                         break;

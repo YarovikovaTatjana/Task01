@@ -1,26 +1,20 @@
 package start;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import db.model.figure.Figure;
 import db.repositories.FigureRepositoryCustom;
 import helper.ConsoleHelper;
 import helper.FigureCreateHelper;
 import helper.FileHelper;
-import db.model.figure.Figure;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 
 class Menu {
-   private static StringWriter writer = new StringWriter();
-   private static ObjectMapper mapper = new ObjectMapper();
-   private static FigureCollection collection;
+  // private static StringWriter writer = new StringWriter();
+ //  private static ObjectMapper mapper = new ObjectMapper();
+ //  private static FigureCollection collection;
    private static String result;
-   private static FigureRepositoryCustom repository = new FigureRepositoryCustom();
+
 
     private static String separator = "============================================\n";
     private static String mainMenu = "Выберете действие:\n" +
@@ -37,8 +31,6 @@ class Menu {
             "5 - Вернуться в главное меню";
 
     static void startMenu(){
-        //serializeFigures();
-       // deserializeFigures();
         boolean isAction = true;
             while (isAction) {
                 System.out.println(mainMenu);
@@ -68,27 +60,31 @@ class Menu {
 
     private static void startRemoveFigure() {
         int number;
-        //ArrayList<Figure> temp = FileHelper.getAllFigiresInFile();
-        ArrayList<Figure> temp = FigureRepositoryCustom.findAll();
-        System.out.println("Доступно фигур: " + temp.size() + ".\nВведите порядковый номер (начиная с 1) удаляемой фигуры");
-        number = ConsoleHelper.readInt(0, temp.size() + 1);
-        //FileHelper.removeFigureInFile(temp.get(number - 1));
+        int sizeCollection = FigureRepositoryCustom.findCountDoc();
+        System.out.println("Доступно фигур: " + sizeCollection + ".\nВведите порядковый номер (начиная с 1) удаляемой фигуры");
+        number = ConsoleHelper.readInt(0, sizeCollection + 1);
         FigureRepositoryCustom.delete(number - 1);
+        if (number<sizeCollection){
+            FigureRepositoryCustom.updateId(sizeCollection-1,number-1);
+            Figure.decremetCount();
+        }
+
+
+
     }
 
     private static void startAddFigure() {
         System.out.println("Введите координаты новой фигуры. \nДля окружности введите 2 координаты крайних точек диаметра. \nДля остальных фигур - координаты вершин");
         Figure userFigure = FigureCreateHelper.getFigureByConsole();
-       // FileHelper.addFigureInFile(userFigure);
         FigureRepositoryCustom.insert(userFigure);
         System.out.println("Добавлена фигура: " + userFigure.receiveName() + "\n" + userFigure.toString());
     }
 
     private static void startActionFigureMenu() {
         int number;
-        ArrayList<Figure> figures = FigureRepositoryCustom.findAll();
-        System.out.println("Доступно фигур: " + figures.size() + ".\nВведите порядковый номер (начиная с 1) для вывода желаемой фигуры");
-        number = ConsoleHelper.readInt(0, figures.size() + 1);
+        int sizeCollection = FigureRepositoryCustom.findCountDoc();
+        System.out.println("Доступно фигур: " + sizeCollection + ".\nВведите порядковый номер (начиная с 1) для вывода желаемой фигуры");
+        number = ConsoleHelper.readInt(0, sizeCollection + 1);
         Figure figure = FigureRepositoryCustom.findFigureById(number - 1);
         System.out.println(figure.receiveName() + "\n" + figure.toString());
         actionFigure(figure);
@@ -131,7 +127,7 @@ class Menu {
 
         }
     }
-
+/*
     private static void serializeFigures (){
         collection = new FigureCollection();
         for (Figure f: FileHelper.getAllFigiresInFile()) {
@@ -159,7 +155,7 @@ class Menu {
             System.out.println(figure.toString());
         }
 
-    }
+    } */
 
     private static void makeTransformFigure(Figure tempFigure) {
         System.out.println("Введите параметр масштабирования в формате #.## \n" +
@@ -226,7 +222,7 @@ class Menu {
         }
 
     }
-
+/*
 @JsonAutoDetect
     public static class FigureCollection{
         public ArrayList<Figure> figureCollection;
@@ -235,6 +231,6 @@ class Menu {
             this.figureCollection = new ArrayList<>();
         }
     }
-
+*/
 
 }

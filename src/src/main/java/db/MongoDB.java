@@ -1,5 +1,7 @@
 package db;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -9,20 +11,28 @@ import db.converters.ConverterToDBObject;
 import db.model.figure.Figure;
 import helper.FileHelper;
 import org.bson.Document;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+
 
 public class MongoDB {
     private MongoClient mongoClient;
     private MongoDatabase mongoDB;
     private MongoCollection<Document> collection;
+    static Logger root = (Logger) LoggerFactory
+            .getLogger(Logger.ROOT_LOGGER_NAME);
+
+    static {
+        root.setLevel(Level.WARN);
+    }
+
 
 
     public void connectDB(){
         try {
-            Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+          // Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
 
 
             mongoClient =  MongoClients.create("mongodb+srv://admin:admin12@cluster0.rma6s.mongodb.net/<baseTask02>?retryWrites=true&w=majority");
