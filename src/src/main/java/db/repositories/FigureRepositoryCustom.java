@@ -1,95 +1,161 @@
 package db.repositories;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import db.MongoDB;
-import db.converters.ConverterToDBObject;
-import db.converters.ConverterToFigure;
+import db.SqlDB;
 import db.model.figure.Figure;
-import org.bson.Document;
+import factory.FigureFactoryFromSet;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static com.mongodb.client.model.Updates.set;
+
 
 public class FigureRepositoryCustom  {
- static MongoDB db = new MongoDB();
- static ConverterToDBObject converterD = new ConverterToDBObject();
- static ConverterToFigure converterF = new ConverterToFigure();
+
+ static SqlDB db = new SqlDB();
+ static String table = db.getTABLENAME();
+ static final String SELECT = "SELECT * FROM " + table;
+ static final String WHERE_ID = " WHERE figuresid = ";
+ static final String INSERT = "INSERT INTO " + table + " (figuresid, typefigure, coordinates) VALUES";
+ static final String DELETE = "DELETE FROM " + table + WHERE_ID;
+ static final String UPDATE_COORDINATES = "UPDATE " + table + " SET coordinates=";
+ static final String UPDATE_ID = "UPDATE " + table + " SET figuresid=";
+ static final String SELECT_COUNT = "SELECT COUNT(*) as count FROM " + table;
 
 
 
-
-static public ArrayList<Figure> findAll() {
-        db.connectDB();
-        ArrayList<Document> figuresDB = db.getCollection().find().into(new ArrayList<>());
+static public ArrayList<Figure> findAll()  {
         ArrayList<Figure> figuresFromDB = new ArrayList<>();
-        for (int i = 0; i < figuresDB.size(); i++) {
-            Figure figure = converterF.convert(figuresDB.get(i));
-            figuresFromDB.add(figure);
-        }
+         try  {
+            ResultSet set = getSelect(getQuerySelectALL());
+                if (set != null) {
+            while (set.next()) {
+                    Figure figure= FigureFactoryFromSet.createFigure(set);
+                    if (figure!=null) figuresFromDB.add(figure);
 
+            }
+        }
+    } catch (SQLException e) {
+             System.out.println("что-то пошло не так поиске следующего сета");
+         }
     db.disconnectDB();
         return figuresFromDB;
     }
 
-
   static public Figure findFigureById(Integer id) {
-        Document result = findDocById(id);
-        Figure figure = converterF.convert(result);
+        ResultSet set = getSelect(getQuerySelectWithParametrs(id));
+      try {
+          set.next();
+      } catch (SQLException e) {
+          System.out.println("что-то пошло не так при переходе на строку");;
+      }
+      Figure figure =  FigureFactoryFromSet.createFigure(set);
       db.disconnectDB();
         return figure;
     }
 
-  static private Document findDocById(Integer id){
-        db.connectDB();
-        BasicDBObject query = new BasicDBObject();
-        query.put("id", id);
-        ArrayList<Document> documents = db.getCollection().find(query).into(new ArrayList<>());
-        Document doc = documents.get(0);
-        db.disconnectDB();
-        return doc;
-    }
+
 
 
   static public void insert(Figure figure) {
-        db.connectDB();
-        DBObject dbObject = converterD.convert(figure);
-        Document document = Document.parse(dbObject.toString());
-        db.getCollection().insertOne(document);
+        insertRow(getInsertQuery(figure));
         db.disconnectDB();
     }
 
 
  static public void update(Integer id, Figure figure) {
-     db.connectDB();
-     Document newFigure = converterD.convertDoc(figure);
-     db.getCollection().updateOne(new BasicDBObject("id", id), set("coordinates", newFigure.get("coordinates")));
+     updateOrDeleteRow(getUpdateCoordinatesQuery(figure, id));
      db.disconnectDB();
-
     }
 
     static public void updateId(Integer id, Integer newId) {
-        db.connectDB();
-        db.getCollection().updateOne(new BasicDBObject("id", id), set("id", newId));
+        updateOrDeleteRow(getUpdateIDQuery(id,newId));
         db.disconnectDB();
     }
 
 
-  static public void delete(Integer id) {
-       Document result =  findDocById(id);
-       db.connectDB();
-        db.getCollection().deleteOne(result);
+
+    static public void delete(Integer id) {
+      updateOrDeleteRow(getDeleteQuery(id));
       db.disconnectDB();
     }
 
-    static public int findCountDoc(){
-        db.connectDB();
-        long l = db.getCollection().countDocuments();
+    static public int findCountDoc() {
+        ResultSet set = getSelect(SELECT_COUNT);
+        int count = 0;
+        try {
+            set.next();
+            count = set.getInt("count");
+        } catch (SQLException e) {
+            System.out.println("count not found");;
+        }
         db.disconnectDB();
-        return (int)l;
+        return count;
     }
+
+    private static String getQuerySelectALL (){
+        String query = SELECT;
+        return query;
+    }
+
+    private static String getQuerySelectWithParametrs (int id){
+        String query = SELECT + WHERE_ID + id;
+        return query;
+    }
+
+    private static String getInsertQuery (Figure figure){
+        String valuesInsert = "(" + figure.getId() + ", '" + figure.receiveType() + "', '" + figure.receiveCoordinatesToString() + "')";
+        String query = INSERT + valuesInsert;
+        return query;
+    }
+
+    private static String getUpdateCoordinatesQuery (Figure figure, int id){
+        String query =UPDATE_COORDINATES + "'" + figure.receiveCoordinatesToString() + "'" + WHERE_ID + id;
+        return query;
+    }
+    private static String getUpdateIDQuery (int id, int new_id){
+        String query =UPDATE_ID +  new_id  + WHERE_ID + id;
+        return query;
+    }
+
+    private static String getDeleteQuery (int id){
+        String query =DELETE + id;
+        return query;
+    }
+
+    private static ResultSet getSelect(String query) {
+        db.connectDB();
+        Statement statement = db.getStatement();
+        ResultSet set = null;
+        try {
+            set = statement.executeQuery(query);
+        } catch (SQLException e) {
+            System.out.println("Не удалось выполнить поиск в БД");
+        }
+        return  set;
+
+    }
+
+    private static void updateOrDeleteRow(String query) {
+        db.connectDB();
+        Statement statement = db.getStatement();
+        try {
+            statement.execute(query);
+        } catch (SQLException e) {
+            System.out.println("Не удалось внести изменения в БД");;
+        }
+    }
+
+    private static void insertRow(String query) {
+        db.connectDB();
+        Statement statement = db.getStatement();
+        try {
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            System.out.println("Запись не добавлена в БД");;
+        }
+    }
+
 
 }

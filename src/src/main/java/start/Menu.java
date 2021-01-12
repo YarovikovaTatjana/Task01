@@ -10,11 +10,6 @@ import java.text.DecimalFormat;
 
 
 class Menu {
-  // private static StringWriter writer = new StringWriter();
- //  private static ObjectMapper mapper = new ObjectMapper();
- //  private static FigureCollection collection;
-   private static String result;
-
 
     private static String separator = "============================================\n";
     private static String mainMenu = "Выберете действие:\n" +
@@ -68,9 +63,6 @@ class Menu {
             FigureRepositoryCustom.updateId(sizeCollection-1,number-1);
             Figure.decremetCount();
         }
-
-
-
     }
 
     private static void startAddFigure() {
@@ -94,24 +86,20 @@ class Menu {
     private static void actionFigure(Figure figure) {
         boolean isAction = true;
         int id = figure.getId();
-       // Figure tempFigure = FigureCreateHelper.createCopyFigure(figure);
         while (isAction) {
             System.out.println(actionSubMenu);
             switch (ConsoleHelper.readInt()) {
                 case 1:
                     makeTurnFigure(figure);
                     saveFigureInDB(figure,id);
-                   // saveFigureInFile(figure,tempFigure);
                     break;
                 case 2:
                     makeMoveFigure(figure);
                     saveFigureInDB(figure,id);
-                    // saveFigureInFile(figure,tempFigure);
                     break;
                 case 3:
                     makeTransformFigure(figure);
                     saveFigureInDB(figure,id);
-                    // saveFigureInFile(figure,tempFigure);
                     break;
                 case 4:
                     DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -127,35 +115,6 @@ class Menu {
 
         }
     }
-/*
-    private static void serializeFigures (){
-        collection = new FigureCollection();
-        for (Figure f: FileHelper.getAllFigiresInFile()) {
-            collection.figureCollection.add(f);
-        }
-        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            try {
-                mapper.writeValue(writer,collection);
-            }
-            catch (IOException e){
-                e.printStackTrace();
-            }
-        result = writer.toString();
-        System.out.println(result);
-    }
-
-    private static void deserializeFigures (){
-       try {
-           collection = mapper.readValue(result,FigureCollection.class);
-       }
-       catch (IOException e){
-           e.printStackTrace();
-       }
-        for (Figure figure: collection.figureCollection) {
-            System.out.println(figure.toString());
-        }
-
-    } */
 
     private static void makeTransformFigure(Figure tempFigure) {
         System.out.println("Введите параметр масштабирования в формате #.## \n" +
@@ -181,28 +140,7 @@ class Menu {
         System.out.println(tempFigure.receiveName() + " после поворота\n" + tempFigure.toString());
     }
 
-    private static void saveFigureInFile(Figure figure, Figure tempFigure){
-            boolean isContinue = true;
-            while (isContinue) {
-                System.out.println("Выберете действие:\n1 - Сохранить\n2 - Отмена");
-                switch (ConsoleHelper.readInt()) {
-                    case 1:
-                        FileHelper.replaceFigureInFile(figure, tempFigure);
-                        isContinue = false;
-                        break;
-                    case 2:
-                        isContinue = false;
-                        break;
-                    default:
-                        System.out.println("Введено некорректное значение");
-                        break;
-                }
-
-            }
-
-    }
-
-    private static void saveFigureInDB(Figure figure, Integer id){
+     private static void saveFigureInDB(Figure figure, Integer id){
         boolean isContinue = true;
         while (isContinue) {
             System.out.println("Выберете действие:\n1 - Сохранить\n2 - Отмена");
@@ -222,15 +160,5 @@ class Menu {
         }
 
     }
-/*
-@JsonAutoDetect
-    public static class FigureCollection{
-        public ArrayList<Figure> figureCollection;
-
-        public FigureCollection() {
-            this.figureCollection = new ArrayList<>();
-        }
-    }
-*/
 
 }

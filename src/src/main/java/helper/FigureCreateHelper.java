@@ -48,6 +48,21 @@ public class FigureCreateHelper {
         return figures;
     }
 
+    public static ArrayList<Coordinate> receiveCoordinates(String coordinatesString) {
+        String[] parametrs = coordinatesString.split(";");
+        ArrayList<Coordinate> coordinates = new ArrayList<>();
+        for (String parametr : parametrs) {
+            try (Scanner scanner = new Scanner(parametr)) {
+                double x = scanner.nextDouble();
+                double y = scanner.nextDouble();
+                coordinates.add(new Coordinate(x, y));
+            } catch (InputMismatchException e) {
+
+            }
+        }
+        return coordinates;
+    }
+
     public static ArrayList<Figure> getFiguresByFileHelper(ArrayList<String> lines) {
         ArrayList<Figure> figures = new ArrayList<>();
         FigureFactory figureFactory;

@@ -131,6 +131,7 @@ public abstract class Figure implements ITurnable, IMovable, ITransformable {
       return this.getClass().getSimpleName();
   }
 
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
