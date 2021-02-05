@@ -1,0 +1,28 @@
+<window title="Search" width="600px" border="normal" onOK="@command('search')"
+	viewModel="@id('vm') @init('model.ActionViewModel')">
+	<div>
+		Индекс фигуры:
+		<intbox value="@save(vm.index)" />
+		<button label="Search" image="/img/search.png" onClick="@command('search')" />
+	</div>
+	<listbox model="@init(vm.dataList)" emptyMessage="Фигура с данным индексом отсутствует" rows="4"
+	selectedItem="@save(vm.selectedFigureData)">
+		<listhead sizable="true">
+			<listheader label="Тип фигуры" />
+			<listheader label="Описание фигуры" />
+		</listhead>
+		<template name="figure">
+			<listitem>
+				<listcell label="@init(each.type)"></listcell>
+				<listcell label="@init(each.description)"></listcell>
+			</listitem>
+		</template>
+	</listbox>
+	<hlayout style="margin-top:20px" width="100%">
+		<image width="250px" src="@load(vm.selectedFigureData.image)" />
+		<vlayout hflex="1">
+			<label value="@load(vm.selectedFigureData.type)" />
+			<label value="@load(vm.selectedFigureData.description)" />
+		</vlayout>
+	</hlayout>
+</window>

@@ -1,9 +1,6 @@
 package db.model.coordinate;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@JsonAutoDetect @Document
 public class Coordinate {
     private double x;
     private double y;

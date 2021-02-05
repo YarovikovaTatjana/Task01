@@ -1,10 +1,9 @@
 package db.model.figure;
 
 import db.model.coordinate.Coordinate;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-@Document(collection="figures")
+
 public class Triangle extends Figure {
     private double line1;
    private double line2;
@@ -12,6 +11,7 @@ public class Triangle extends Figure {
 
     public Triangle(ArrayList<Coordinate> coordinates) {
         super(coordinates);
+        this.typeFigure=TypeFigure.Triangle;
         this.line1=calculateLine(coordinates.get(0),coordinates.get(1));
         this.line2=calculateLine(coordinates.get(0),coordinates.get(2));
     }
@@ -33,8 +33,15 @@ public class Triangle extends Figure {
 
     @Override
     public void transform(double size) {
-        coordinates.get(1).setX(coordinates.get(1).getX()+ (line1*size));
-        coordinates.get(2).setY(coordinates.get(2).getY()+ (line2*size));
+        Coordinate startCoordinate = coordinates.get(0);
+        double startX = startCoordinate.getX();
+        double startY = startCoordinate.getY();
+        for (int i = 1; i < coordinates.size(); i++) {
+            double x = (coordinates.get(i).getX() - startX) * size + startX;
+            double y = (coordinates.get(i).getY() - startY) * size + startY;
+            coordinates.get(i).setX(x);
+            coordinates.get(i).setY(y);
+        }
     }
 
     public String receiveName() {

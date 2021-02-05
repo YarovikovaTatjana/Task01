@@ -87,7 +87,7 @@ public class FigureCreateHelper {
         return figureFactory.createFigure(coordinates);
     }
 
-    private static FigureFactory getFigureFactory(ArrayList<Coordinate> coordinates) {
+    public static FigureFactory getFigureFactory(ArrayList<Coordinate> coordinates) {
         FigureFactory figureFactory;
             switch (coordinates.size()) {
                 case 2:

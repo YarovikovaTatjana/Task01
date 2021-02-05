@@ -1,0 +1,136 @@
+<window title="Figure's application" width="900px" border="normal"
+	apply="model.ActionController">
+	<div>
+		Номер фигуры:
+		<intbox id="indexBox" />
+		<button id="searchButton" label="Найти" image="/img/search.png" />
+	</div>
+	<listbox id="figureListbox" emptyMessage="Нет выбранных фигур" rows="2">
+		<listhead>
+			<listheader label="Выбранная фигура" />
+		</listhead>
+	</listbox>
+	<hlayout style="margin-top:20px" width="100%">
+		<vlayout>
+			<label id="typeLabel"/>
+			<label id="descriptionLabel"/>
+		</vlayout>
+		<template name="type">
+			<listitem>
+				<listcell label="${type}"></listcell>
+				<listcell label="${description}"></listcell>
+			</listitem>
+		</template>
+	</hlayout>
+	<html><hr></hr></html>
+	<html><h2>Действия с выбранной фигурой</h2></html>
+
+	<hlayout style="margin-top:5px" width="100%" >
+		<vlayout>
+			<hlayout style="margin-top:20px">
+			Угол(рад.)<doublebox id="turnBox" />
+			</hlayout>
+			<hlayout><button id="turnButton" label="Повернуть" /></hlayout>
+		</vlayout>
+		<vlayout>
+			<hlayout style="margin-top:20px">
+				Коэф.размера <doublebox id="sizeBox" />
+			</hlayout>
+			<hlayout><button id="sizeButton" label="Изменить размер" /></hlayout>
+		</vlayout>
+		<vlayout>
+			<hlayout>
+			По оси Х:<intbox id="XBox"/>
+			</hlayout>
+			<hlayout >
+			По оси У: <intbox id="YBox"/>
+			</hlayout>
+			<hlayout ><button id="moveButton" label="Переместить" /></hlayout>
+		</vlayout>
+	</hlayout>
+	<hlayout style="margin-top:20px" width="100%">
+	<vlayout>
+		<label id="typeNewLabel"/>
+		<label id="descriptionNewLabel"/>
+	</vlayout>
+	<template name="type">
+		<listitem>
+			<listcell label="${type}"></listcell>
+			<listcell label="${description}"></listcell>
+		</listitem>
+	</template>
+</hlayout>
+	<html><hr></hr></html>
+	<html><h2>Действия с БД</h2></html>
+
+	<hlayout style="margin-top:20px" width="100%">
+		<vlayout width="290">
+			<hlayout  width="100%" height="100">
+			Сбросить изменения
+			</hlayout>
+			<hlayout width="100%" height="100"><button id="clearButton" label="Сбросить" /></hlayout>
+		</vlayout>
+		<vlayout width="10"/>
+		<vlayout width="290">
+			<hlayout  width="100%" height="100">Обновить данные в БД
+			</hlayout>
+			<hlayout width="100%" height="100"><button id="updateButton" label="Сохранить" image="/images/save.png"/></hlayout>
+		</vlayout>
+		<vlayout width="10"/>
+		<vlayout width="290">
+			<hlayout width="100%" height="100">Удалить фигуру из БД
+			</hlayout>
+			<hlayout width="100%" height="100"><button id="deleteButton" label="Удалить" image="/images/delete.png"/></hlayout>
+		</vlayout>
+	</hlayout>
+	<hlayout style="margin-top:20px" width="100%">
+		<vlayout>
+			<label id="statusLabel"/>
+		</vlayout>
+		<template name="type">
+			<listitem>
+				<listcell label="${status}"></listcell>
+			</listitem>
+		</template>
+	</hlayout>
+	<html><hr></hr></html>
+	<html><h2>Дополнительные действия</h2></html>
+<hlayout>
+	<vlayout>
+		<hlayout>
+			Введите Х:<intbox id="XCoordinateBox"/>
+		</hlayout>
+		<hlayout >
+			Введите У: <intbox id="YCoordinateBox"/>
+		</hlayout>
+		<hlayout ><button id="addCoordinateButton" label="Добавить координату" /></hlayout>
+		<hlayout ><button id="insertButton" label="Добавить фигуру" /></hlayout>
+	</vlayout>
+</hlayout>
+	<hlayout style="margin-top:20px" width="100%">
+		<vlayout>
+			<label id="coordinateLabel"/>
+		</vlayout>
+		<template name="coordinate">
+			<listitem>
+				<listcell label="${coordinate}"></listcell>
+			</listitem>
+		</template>
+	</hlayout>
+
+	<hlayout>
+		<vlayout>
+			<label id="statusInsertLabel"/>
+			<label id="typeInsertLabel"/>
+			<label id="descriptionInsertLabel"/>
+		</vlayout>
+		<template name="newFigure">
+			<listitem>
+				<listcell label="${status}"></listcell>
+				<listcell label="${type}"></listcell>
+				<listcell label="${description}"></listcell>
+			</listitem>
+		</template>
+	</hlayout>
+
+</window>

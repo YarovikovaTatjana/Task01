@@ -1,10 +1,9 @@
 package db.model.figure;
 
 import db.model.coordinate.Coordinate;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-@Document(collection="figures")
+
 public class Circle extends Figure {
    private double radius;
    private Coordinate centre;
@@ -17,12 +16,21 @@ public class Circle extends Figure {
 
     public Circle(ArrayList<Coordinate> coordinates) {
         super(coordinates);
+        this.typeFigure=TypeFigure.Circle;
         this.radius=calculateLine(coordinates.get(0),coordinates.get(1))/2;
         this.centre = calculateCentre();
 
     }
 
     public Circle() {
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public Coordinate getCentre() {
+        return centre;
     }
 
     private Coordinate calculateCentre() {

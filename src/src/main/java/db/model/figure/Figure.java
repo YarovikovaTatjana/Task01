@@ -1,46 +1,36 @@
 package db.model.figure;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import db.model.coordinate.Coordinate;
 import db.repositories.FigureRepositoryCustom;
 import interfaces.IMovable;
 import interfaces.ITransformable;
 import interfaces.ITurnable;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
+
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, property="type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value= Circle.class, name= "Circle"),
-        @JsonSubTypes.Type(value = Triangle.class, name = "Triangle"),
-        @JsonSubTypes.Type(value =Rectangle.class, name = "Rectangle"),
-        @JsonSubTypes.Type(value =Polygon.class, name = "Polygon")
-})
 
-@Document(collection="figures")
 public abstract class Figure implements ITurnable, IMovable, ITransformable {
     private static final AtomicInteger COUNTER = new AtomicInteger(FigureRepositoryCustom.findCountDoc());
 
-  @JsonIgnore   @Transient
+
     private static final long serialVersionUid = 1L;
 
     int id;
     ArrayList <Coordinate> coordinates;
     TypeFigure typeFigure;
 
-    @JsonIgnore     @Transient
+
     DecimalFormat decimalFormat = new DecimalFormat("#.###");
 
   public Figure(ArrayList<Coordinate> coordinates) {
       this.id = COUNTER.getAndIncrement();
         this.coordinates = coordinates;
+
     }
 
     public Figure() {

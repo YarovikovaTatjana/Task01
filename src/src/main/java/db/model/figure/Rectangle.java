@@ -1,10 +1,9 @@
 package db.model.figure;
 
 import db.model.coordinate.Coordinate;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-@Document(collection="figures")
+
 public class Rectangle extends Figure {
     private double length;
     private double hight;
@@ -12,6 +11,7 @@ public class Rectangle extends Figure {
 
     public Rectangle(ArrayList<Coordinate> coordinates) {
         super(coordinates);
+        this.typeFigure=TypeFigure.Rectangle;
         this.length =  calculateLine(coordinates.get(0),coordinates.get(1));
         this.hight =  calculateLine(coordinates.get(1),coordinates.get(2));
     }

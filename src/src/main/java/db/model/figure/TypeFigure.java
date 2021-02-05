@@ -12,7 +12,11 @@ public enum TypeFigure {
         this.title = title;
     }
 
-   @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
     public String toString() {
         return "Фигура: " +  title;
     }

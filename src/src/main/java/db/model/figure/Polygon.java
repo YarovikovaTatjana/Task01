@@ -1,14 +1,14 @@
 package db.model.figure;
 
 import db.model.coordinate.Coordinate;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 
-@Document(collection="figures")
+
 public class Polygon extends Figure {
     public Polygon(ArrayList<Coordinate> coordinates) {
         super(coordinates);
+        this.typeFigure=TypeFigure.Polygon;
     }
 
     public Polygon() {
