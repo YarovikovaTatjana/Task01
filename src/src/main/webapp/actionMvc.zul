@@ -12,11 +12,13 @@
 	</listbox>
 	<hlayout style="margin-top:20px" width="100%">
 		<vlayout>
-			<label id="typeLabel"/>
+			<image id="figureImage" width="100px" />
+            <label id="typeLabel"/>
 			<label id="descriptionLabel"/>
 		</vlayout>
 		<template name="type">
 			<listitem>
+				<listcell image="${figureImage}"></listcell>
 				<listcell label="${type}"></listcell>
 				<listcell label="${description}"></listcell>
 			</listitem>
@@ -49,15 +51,19 @@
 		</vlayout>
 	</hlayout>
 	<hlayout style="margin-top:20px" width="100%">
+
 	<vlayout>
+		<image id="tempFigureImage" width="100px" />
 		<label id="typeNewLabel"/>
 		<label id="descriptionNewLabel"/>
 	</vlayout>
 	<template name="type">
 		<listitem>
+			<listcell image="${tempFigureImage}"></listcell>
 			<listcell label="${type}"></listcell>
 			<listcell label="${description}"></listcell>
 		</listitem>
+
 	</template>
 </hlayout>
 	<html><hr></hr></html>

@@ -18,7 +18,7 @@ class FigureListTemplate implements Template {
 
 		FigureData figure = (FigureData) resolver.resolveVariable("each");
 		Listitem listitem = new Listitem();
-		listitem.appendChild(new Listcell(figure.getTypeFigure().toString()));
+		listitem.appendChild(new Listcell(figure.getType()));
 		listitem.appendChild(new Listcell(figure.getDescription()));
 
 		//append to the parent

@@ -5,6 +5,8 @@ import db.model.coordinate.Coordinate;
 import db.model.figure.Figure;
 import factory.FigureFactory;
 import helper.FigureCreateHelper;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -40,10 +42,13 @@ public class ActionController extends SelectorComposer<Component> {
     @Wire
     private Image figureImage;
     @Wire
+    private Image allFigureImage;
+    @Wire
+    private Image tempFigureImage;
+    @Wire
     private Intbox XBox;
     @Wire
     private Intbox YBox;
-
     @Wire
     private Intbox XCoordinateBox;
     @Wire
@@ -65,10 +70,24 @@ public class ActionController extends SelectorComposer<Component> {
     private FigureData selected;
     private ArrayList<Coordinate> addCoordinates = new ArrayList<>();
 
+
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         figureListbox.setModel(dataModel);
+        ImageFigureData data = new ImageFigureData(selected);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                data.start(new Stage(), "figures.png");
+            }
+        });
+
+        try {
+            data.stop();
+        } catch (Exception ex) {
+
+        }
 
     }
 
@@ -81,6 +100,9 @@ public class ActionController extends SelectorComposer<Component> {
             selected = figureService.findFigureData(index);
             dataModel.add(selected);
             typeLabel.setValue(selected.getType());
+           // allFigureImage.setSrc("figures.png");
+            setSrcFigureImage("figure " + selected.getIndex() +".png");
+            figureImage.setSrc(selected.getImageFigure());
             descriptionLabel.setValue(selected.getDescription());
             turnBox.setValue(null);
             sizeBox.setValue(null);
@@ -88,15 +110,36 @@ public class ActionController extends SelectorComposer<Component> {
             YBox.setValue(null);
             typeNewLabel.setValue(null);
             descriptionNewLabel.setValue(null);
+            tempFigureImage.setSrc(null);
            }
            catch (Exception e){
                dataModel.addAll(figureService.findAll());
                selected = dataModel.get(0);
+               setSrcFigureImage("figure " + selected.getIndex() +".png");
+               figureImage.setSrc(selected.getImageFigure());
                typeLabel.setValue(selected.getType());
                descriptionLabel.setValue(selected.getDescription());
 
            }
     }
+
+    private void setSrcFigureImage(String path) {
+        ImageFigureData data = new ImageFigureData(selected);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                data.start(new Stage(), path);
+            }
+        });
+        try {
+            data.stop();
+        } catch (Exception ex) {
+        }
+
+
+    }
+
+
 
     @Listen("onClick = #sizeButton")
     public void sizeController() {
@@ -111,7 +154,8 @@ public class ActionController extends SelectorComposer<Component> {
         selected.transform(size);
         dataModel.clear();
         dataModel.add(selected);
-
+        setSrcFigureImage("sizeTempFigure " + selected.getIndex() +".png");
+        tempFigureImage.setSrc(selected.getSizeTempImageFigure());
         typeNewLabel.setValue(selected.getType());
         descriptionNewLabel.setValue("Новое описание " + selected.getDescription());
 
@@ -208,7 +252,8 @@ public class ActionController extends SelectorComposer<Component> {
         selected.turn(angle);
         dataModel.clear();
         dataModel.add(selected);
-
+        setSrcFigureImage("turnTempFigure " + selected.getIndex() +".png");
+        tempFigureImage.setSrc(selected.getTurnTempImageFigure());
         typeNewLabel.setValue(selected.getType());
         descriptionNewLabel.setValue("Новое описание " + selected.getDescription());
     }
@@ -233,8 +278,8 @@ public class ActionController extends SelectorComposer<Component> {
         selected.move(x,y);
         dataModel.clear();
         dataModel.add(selected);
-
-
+        setSrcFigureImage("moveTempFigure " + selected.getIndex() +".png");
+        tempFigureImage.setSrc(selected.getMoveTempImageFigure());
         typeNewLabel.setValue(selected.getType());
         descriptionNewLabel.setValue("Новое описание " + selected.getDescription());
     }
@@ -243,7 +288,8 @@ public class ActionController extends SelectorComposer<Component> {
     public void showDetail() {
         Set<FigureData> selection = dataModel.getSelection();
         selected = selection.iterator().next();
-       // figureImage.setSrc(selected.getImageFigure());
+        setSrcFigureImage("figure " + selected.getIndex() +".png");
+        figureImage.setSrc(selected.getImageFigure());
         typeLabel.setValue(selected.getType());
         descriptionLabel.setValue(selected.getDescription());
     }

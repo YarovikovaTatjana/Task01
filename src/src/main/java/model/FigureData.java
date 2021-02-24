@@ -27,7 +27,10 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
     double radius;
     String description;
     String type;
-    String imageFigure = "figure.png";
+    String imageFigure;
+    String turnTempImageFigure;
+    String sizeTempImageFigure;
+    String moveTempImageFigure;
 
 
 
@@ -41,7 +44,14 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
             Circle circle = (Circle) figure;
             this.radius = circle.getRadius();
         }
-       // fillFigure();
+        this.imageFigure="/img/figure " + figure.getId() + ".png";
+        this.turnTempImageFigure="/img/turnTempFigure " + figure.getId() + ".png?dummy=23423423423";
+        this.sizeTempImageFigure="/img/sizeTempFigure " + figure.getId() + ".png?dummy=23423423423";
+        this.moveTempImageFigure="/img/moveTempFigure " + figure.getId() + ".png?dummy=23423423423";
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public Figure transformByFigure(){
@@ -67,26 +77,12 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
         return typeFigure.getTitle();
     }
 
-    public void fillFigure(){
-        Canvas canvas = new Canvas(100,100);
-        GraphicsContext context = canvas.getGraphicsContext2D();
-        if (typeFigure==TypeFigure.Circle){
-            double x = coordinates.get(0).getX();
-            double y = coordinates.get(0).getY();
-            context.fillOval(x,y,radius,radius);
-        }
-        else{
-            int count = coordinates.size();
-            double[] xPoints = new double[count];
-            double[] yPoints = new double[count];
-            for (int i = 0; i <count ; i++) {
-                xPoints[i] = coordinates.get(i).getX();
-                yPoints[i] = coordinates.get(i).getY();
-            }
-            context.fillPolygon(xPoints,yPoints,count);
-        }
-        WritableImage image = canvas.snapshot(null,null);
-        File file = new File(imageFigure);
+
+
+    public void fillFigure(String pathName) {
+        String path = "C:\\Users\\Домовой\\IdeaProjects\\Task01\\src\\src\\main\\webapp\\img\\" + pathName;
+        WritableImage image = getWritableImage();
+        File file = new File(path);
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
         } catch (IOException ex) {
@@ -95,8 +91,46 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
 
     }
 
+    public WritableImage getWritableImage() {
+        Canvas canvas = new Canvas(400,400);
+        GraphicsContext context = canvas.getGraphicsContext2D();
+        if (typeFigure== TypeFigure.Circle){
+            double x = 200+coordinates.get(0).getX();
+            double y = 200+coordinates.get(0).getY();
+            context.fillOval(x,y,radius,radius);
+        }
+        else{
+            int count = coordinates.size();
+            double[] xPoints = new double[count];
+            double[] yPoints = new double[count];
+            for (int i = 0; i <count ; i++) {
+                xPoints[i] = 200+ coordinates.get(i).getX();
+                yPoints[i] = 200+coordinates.get(i).getY();
+            }
+            context.fillPolygon(xPoints,yPoints,count);
+        }
+        return canvas.snapshot(null,null);
+    }
+
+
+    public double getRadius() {
+        return radius;
+    }
+
     public String getImageFigure() {
         return imageFigure;
+    }
+
+    public String getTurnTempImageFigure() {
+        return turnTempImageFigure;
+    }
+
+    public String getSizeTempImageFigure() {
+        return sizeTempImageFigure;
+    }
+
+    public String getMoveTempImageFigure() {
+        return moveTempImageFigure;
     }
 
     @Override
@@ -109,7 +143,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
             Circle circle = (Circle) figure;
             this.radius =  circle.getRadius();
         }
-       // fillFigure();
+
     }
 
     @Override
@@ -122,7 +156,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
             Circle circle = (Circle) figure;
             this.radius =  circle.getRadius();
         }
-       // fillFigure();
+
 
     }
 
@@ -136,7 +170,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
             Circle circle = (Circle) figure;
             this.radius =  circle.getRadius();
         }
-       // fillFigure();
+
 
     }
 
