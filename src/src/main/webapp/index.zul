@@ -2,7 +2,7 @@
 <window border="normal" title="Get ZK Up and Running">
 	<vlayout>
 		<a href="hello.zul">Справка</a>
-		<a href="actionMvc.zul">Открыть приложение</a>
+		<a href="actionForAll.zul">Открыть приложение</a>
 	</vlayout>
 </window>
 </zk>

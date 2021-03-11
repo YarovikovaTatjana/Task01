@@ -26,39 +26,54 @@
             <dependency>
                 <groupId>org.zkoss.zk</groupId>
                 <artifactId>zk-bom</artifactId>
-                <version>9.5.0.2</version>
+                <version>9.0.1-Eval</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <repositories>
+        <repository>
+            <id>ZK CE</id>
+            <name>ZK CE Repository</name>
+            <url>https://mavensync.zkoss.org/maven2</url>
+        </repository>
+        <repository>
+            <id>ZK EVAL</id>
+            <name>ZK Evaluation Repository</name>
+            <url>https://mavensync.zkoss.org/eval</url>
+        </repository>
+        <repository>
+            <id>ZK EE</id>
+            <url>https://maven.zkoss.org/repo/zk/ee</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>zkmaven</id>
+            <name>ZK Maven Plugin Repository</name>
+            <url>https://mavensync.zkoss.org/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
        <dependencies>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.18</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.zkoss.zk</groupId>
-            <artifactId>zkmax</artifactId>
-            <version>3.6.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.zkoss.zk</groupId>
-            <artifactId>zul</artifactId>
-            <version>9.5.0.2</version>
-        </dependency>
            <dependency>
                <groupId>org.zkoss.zk</groupId>
-               <artifactId>zkbind</artifactId>
-               <version>9.5.0.2</version>
+               <artifactId>zkmax</artifactId>
            </dependency>
-        <dependency>
-            <groupId>org.zkoss.zk</groupId>
-            <artifactId>zkplus</artifactId>
-            <version>9.5.0.2</version>
-        </dependency>
+           <dependency>
+               <groupId>org.zkoss.zk</groupId>
+               <artifactId>zkplus</artifactId>
+           </dependency>
+           <dependency>
+               <groupId>org.zkoss.chart</groupId>
+               <artifactId>zkcharts</artifactId>
+               <version>7.2.1.0-Eval</version>
+           </dependency>
            <dependency>
                <groupId>ch.qos.logback</groupId>
                <artifactId>logback-classic</artifactId>

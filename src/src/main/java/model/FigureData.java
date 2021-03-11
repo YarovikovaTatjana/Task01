@@ -25,6 +25,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
     TypeFigure typeFigure;
     ArrayList<Coordinate> coordinates;
     double radius;
+    Coordinate centre;
     String description;
     String type;
     String imageFigure;
@@ -38,11 +39,13 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
         this.index = figure.getId();
         this.typeFigure = figure.getTypeFigure();
         this.coordinates = figure.getCoordinates();
+       // Collections.sort(coordinates,Coordinate.COMPARE_BY_XY);
         this.description = figure.toString();
         this.type = figure.getTypeFigure().getTitle();
         if (figure instanceof Circle) {
             Circle circle = (Circle) figure;
             this.radius = circle.getRadius();
+            this.centre = circle.getCentre();
         }
         this.imageFigure="/img/figure " + figure.getId() + ".png";
         this.turnTempImageFigure="/img/turnTempFigure " + figure.getId() + ".png?dummy=23423423423";
@@ -50,7 +53,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
         this.moveTempImageFigure="/img/moveTempFigure " + figure.getId() + ".png?dummy=23423423423";
     }
 
-    public int getIndex() {
+    public int getID() {
         return index;
     }
 
@@ -115,6 +118,10 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
 
     public double getRadius() {
         return radius;
+    }
+
+    public Coordinate getCentre() {
+        return centre;
     }
 
     public String getImageFigure() {

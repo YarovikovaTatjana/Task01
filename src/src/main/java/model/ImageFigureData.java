@@ -28,17 +28,8 @@ public class ImageFigureData extends Application {
 
 
     public void start(Stage primaryStage, String path) {
-        if (path.equals("figures.png")){
-            for (FigureData data: figureService.findAll()) {
-                data.fillFigure("figure "+ data.getIndex() + ".png");
-                data.fillFigure("turnTempFigure "+ data.getIndex() + ".png");
-                data.fillFigure("sizeTempFigure "+ data.getIndex() + ".png");
-                data.fillFigure("moveTempFigure "+ data.getIndex() + ".png");
-            }
-        }
-        else figureData.fillFigure(path);
 
-
+        figureData.fillFigure(path);
     }
 
 

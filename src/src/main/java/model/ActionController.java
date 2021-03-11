@@ -3,11 +3,16 @@ package model;
 
 import db.model.coordinate.Coordinate;
 import db.model.figure.Figure;
+import db.model.figure.TypeFigure;
 import factory.FigureFactory;
 import helper.FigureCreateHelper;
-import javafx.application.Platform;
-import javafx.stage.Stage;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.chart.Charts;
+import org.zkoss.chart.Legend;
+import org.zkoss.chart.PlotLine;
+import org.zkoss.chart.model.DefaultXYModel;
+import org.zkoss.chart.model.DefaultXYZModel;
+import org.zkoss.chart.model.XYModel;
+import org.zkoss.chart.model.XYZModel;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -16,7 +21,7 @@ import org.zkoss.zul.*;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class ActionController extends SelectorComposer<Component> {
+public class ActionController extends SelectorComposer<Window> {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,12 +45,6 @@ public class ActionController extends SelectorComposer<Component> {
     @Wire
     private Doublebox sizeBox;
     @Wire
-    private Image figureImage;
-    @Wire
-    private Image allFigureImage;
-    @Wire
-    private Image tempFigureImage;
-    @Wire
     private Intbox XBox;
     @Wire
     private Intbox YBox;
@@ -62,67 +61,169 @@ public class ActionController extends SelectorComposer<Component> {
     @Wire
     private Label statusInsertLabel;
 
+    @Wire
+    Charts chartCircle;
+    @Wire
+    Charts chartNotCircle;
 
 
     private ListModelList<FigureData> dataModel = new ListModelList<>();
-
     private FigureService figureService = new FigureServiceImpl();
     private FigureData selected;
     private ArrayList<Coordinate> addCoordinates = new ArrayList<>();
+    private XYZModel circleModel;
+    private XYModel lineModel;
+    private PlotLine plotLine;
+
 
 
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
+    public void doAfterCompose(Window comp) throws Exception {
         super.doAfterCompose(comp);
         figureListbox.setModel(dataModel);
-        ImageFigureData data = new ImageFigureData(selected);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                data.start(new Stage(), "figures.png");
-            }
-        });
-
-        try {
-            data.stop();
-        } catch (Exception ex) {
-
-        }
+        extractedAll();
 
     }
+
+    private void extractedAll() {
+        setModelAllCircle();
+        chartCircle.setModel(circleModel);
+        setModelAllLine();
+        chartNotCircle.setModel(lineModel);
+        plotLine = new PlotLine();
+        plotLine.setValue(0);
+        plotLine.setWidth(1);
+        plotLine.setColor("#808080");
+        chartCircle.getYAxis().addPlotLine(plotLine);
+        chartNotCircle.getYAxis().addPlotLine(plotLine);
+        Legend legendCircle = chartCircle.getLegend();
+        legendCircle.setLayout("vertical");
+        legendCircle.setAlign("right");
+        legendCircle.setVerticalAlign("middle");
+        legendCircle.setBorderWidth(0);
+        Legend legendNotCircle = chartNotCircle.getLegend();
+        legendNotCircle.setLayout("vertical");
+        legendNotCircle.setAlign("right");
+        legendNotCircle.setVerticalAlign("middle");
+        legendNotCircle.setBorderWidth(0);
+        chartCircle.setVisible(true);
+        chartNotCircle.setVisible(true);
+    }
+
+    private void extractedSelect() {
+        if (selected.getTypeFigure()==TypeFigure.Circle){
+            chartCircle.setVisible(true);
+            circleModel.clear();
+            setModelCircle(selected);
+            chartCircle.setModel(circleModel);
+            chartCircle.getYAxis().addPlotLine(plotLine);
+            Legend legendCircle = chartCircle.getLegend();
+            legendCircle.setLayout("vertical");
+            legendCircle.setAlign("right");
+            legendCircle.setVerticalAlign("middle");
+            legendCircle.setBorderWidth(0);
+            chartNotCircle.setVisible(false);
+        }
+        else{
+            chartNotCircle.setVisible(true);
+            lineModel.clear();
+            setModelLine(selected);
+            chartNotCircle.setModel(lineModel);
+            chartNotCircle.getYAxis().addPlotLine(plotLine);
+            Legend legendNotCircle = chartNotCircle.getLegend();
+            legendNotCircle.setLayout("vertical");
+            legendNotCircle.setAlign("right");
+            legendNotCircle.setVerticalAlign("middle");
+            legendNotCircle.setBorderWidth(0);
+            chartCircle.setVisible(false);
+        }
+
+
+    }
+
 
     @Listen("onClick = #searchButton; onOK = window")
     public void search() {
         try {
+            dataModel.clear();
             int index = indexBox.getValue();
             index--;
-            dataModel.clear();
             selected = figureService.findFigureData(index);
             dataModel.add(selected);
             typeLabel.setValue(selected.getType());
-           // allFigureImage.setSrc("figures.png");
-            setSrcFigureImage("figure " + selected.getIndex() +".png");
-            figureImage.setSrc(selected.getImageFigure());
             descriptionLabel.setValue(selected.getDescription());
-            turnBox.setValue(null);
-            sizeBox.setValue(null);
-            XBox.setValue(null);
-            YBox.setValue(null);
-            typeNewLabel.setValue(null);
-            descriptionNewLabel.setValue(null);
-            tempFigureImage.setSrc(null);
+            clearLabel();
+            extractedSelect();
            }
            catch (Exception e){
+               dataModel.clear();
                dataModel.addAll(figureService.findAll());
                selected = dataModel.get(0);
-               setSrcFigureImage("figure " + selected.getIndex() +".png");
-               figureImage.setSrc(selected.getImageFigure());
                typeLabel.setValue(selected.getType());
                descriptionLabel.setValue(selected.getDescription());
-
+               clearLabel();
+               extractedSelect();
            }
     }
 
+    private void clearLabel(){
+        turnBox.setValue(null);
+        sizeBox.setValue(null);
+        XBox.setValue(null);
+        YBox.setValue(null);
+        typeNewLabel.setValue(null);
+        descriptionNewLabel.setValue(null);
+    }
+
+
+    private void setModelAllLine (){
+        lineModel = new DefaultXYModel();
+        lineModel.setAutoSort(false);
+        for (FigureData data : figureService.findAll()) {
+            if (data.getTypeFigure()!=TypeFigure.Circle) {
+                double firstX = data.getCoordinates().get(0).getX();
+                double firstY = data.getCoordinates().get(0).getY();
+                String series = data.getType() + " " + (data.getID() + 1);
+                for (int i = 0; i < data.getCoordinates().size(); i++) {
+                    lineModel.addValue(series, data.getCoordinates().get(i).getX(), data.getCoordinates().get(i).getY());
+                    if (i == (data.getCoordinates().size()-1))  lineModel.addValue(series, firstX, firstY);
+                }
+            }
+        }
+        }
+
+    private void setModelLine (FigureData data){
+        lineModel = new DefaultXYModel();
+        lineModel.setAutoSort(false);
+        double firstX = data.getCoordinates().get(0).getX();
+        double firstY = data.getCoordinates().get(0).getY();
+        String series = data.getType() + " " + (data.getID() + 1);
+        for (int i = 0; i < data.getCoordinates().size(); i++) {
+            lineModel.addValue(series, data.getCoordinates().get(i).getX(), data.getCoordinates().get(i).getY());
+            if (i == (data.getCoordinates().size()-1))  lineModel.addValue(series, firstX, firstY);
+        }
+
+    }
+
+
+    private void setModelCircle(FigureData data){
+        circleModel = new DefaultXYZModel();
+        circleModel.addValue(data.getType() + " " + (data.getID() + 1), data.getCentre().getX(), data.getCentre().getY(), (data.getRadius() * 2));
+    }
+
+
+    private void setModelAllCircle(){
+       circleModel = new DefaultXYZModel();
+        for (FigureData data : figureService.findAll()) {
+            if (data.getTypeFigure()==TypeFigure.Circle) {
+                circleModel.addValue(data.getType() + " " + (data.getID() + 1), data.getCentre().getX(), data.getCentre().getY(), (data.getRadius() * 2));
+            }
+        }
+
+    }
+
+
+/*
     private void setSrcFigureImage(String path) {
         ImageFigureData data = new ImageFigureData(selected);
         Platform.runLater(new Runnable() {
@@ -134,42 +235,17 @@ public class ActionController extends SelectorComposer<Component> {
         try {
             data.stop();
         } catch (Exception ex) {
+
         }
 
 
     }
-
-
-
-    @Listen("onClick = #sizeButton")
-    public void sizeController() {
-        if (selected==null) search();
-        double size;
-        try {
-            size = sizeBox.getValue();
-        }
-        catch (Exception e){
-            size=1;
-        }
-        selected.transform(size);
-        dataModel.clear();
-        dataModel.add(selected);
-        setSrcFigureImage("sizeTempFigure " + selected.getIndex() +".png");
-        tempFigureImage.setSrc(selected.getSizeTempImageFigure());
-        typeNewLabel.setValue(selected.getType());
-        descriptionNewLabel.setValue("Новое описание " + selected.getDescription());
-
-    }
-
+*/
     @Listen("onClick = #clearButton")
     public void clearController() {
         search();
         typeNewLabel.setValue(selected.getType());
         descriptionNewLabel.setValue(selected.getDescription());
-        turnBox.setValue(null);
-        sizeBox.setValue(null);
-        XBox.setValue(null);
-        YBox.setValue(null);
     }
 
     @Listen("onClick = #updateButton")
@@ -180,7 +256,8 @@ public class ActionController extends SelectorComposer<Component> {
         typeLabel.setValue(selected.getType());
         descriptionLabel.setValue(selected.getDescription());
         statusLabel.setValue("Информация обновлена");
-        search();
+        clearLabel();
+        extractedAll();
 
     }
 
@@ -190,7 +267,8 @@ public class ActionController extends SelectorComposer<Component> {
             figureService.deleteFigureData(selected.index);
             statusLabel.setValue("Фигура удалена");
             figureService = new FigureServiceImpl();
-            search();
+            clearLabel();
+            extractedAll();
         }
     }
 
@@ -230,6 +308,7 @@ public class ActionController extends SelectorComposer<Component> {
             dataModel.clear();
             typeInsetLabel.setValue(data.getType());
             descriptionInsertLabel.setValue(data.getDescription());
+            extractedAll();
         }
         catch (Exception e){
 
@@ -252,10 +331,9 @@ public class ActionController extends SelectorComposer<Component> {
         selected.turn(angle);
         dataModel.clear();
         dataModel.add(selected);
-        setSrcFigureImage("turnTempFigure " + selected.getIndex() +".png");
-        tempFigureImage.setSrc(selected.getTurnTempImageFigure());
         typeNewLabel.setValue(selected.getType());
         descriptionNewLabel.setValue("Новое описание " + selected.getDescription());
+        extractedSelect();
     }
 
     @Listen("onClick = #moveButton")
@@ -278,20 +356,36 @@ public class ActionController extends SelectorComposer<Component> {
         selected.move(x,y);
         dataModel.clear();
         dataModel.add(selected);
-        setSrcFigureImage("moveTempFigure " + selected.getIndex() +".png");
-        tempFigureImage.setSrc(selected.getMoveTempImageFigure());
         typeNewLabel.setValue(selected.getType());
         descriptionNewLabel.setValue("Новое описание " + selected.getDescription());
+        extractedSelect();
+    }
+
+    @Listen("onClick = #sizeButton")
+    public void sizeController() {
+        if (selected==null) search();
+        double size;
+        try {
+            size =sizeBox.getValue();
+        }
+        catch (Exception e){
+            size=1;
+        }
+        selected.transform(size);
+        dataModel.clear();
+        dataModel.add(selected);
+        typeNewLabel.setValue(selected.getType());
+        descriptionNewLabel.setValue("Новое описание " + selected.getDescription());
+        extractedSelect();
     }
 
     @Listen("onSelect = #figureListbox")
     public void showDetail() {
         Set<FigureData> selection = dataModel.getSelection();
         selected = selection.iterator().next();
-        setSrcFigureImage("figure " + selected.getIndex() +".png");
-        figureImage.setSrc(selected.getImageFigure());
         typeLabel.setValue(selected.getType());
         descriptionLabel.setValue(selected.getDescription());
+        extractedSelect();
     }
 
 
