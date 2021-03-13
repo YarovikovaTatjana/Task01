@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+//Вспомогательный класс для отрисовки с помощью canvas - уже неактуально. Но оставляю для примера
+
 public class ImageFigureData extends Application {
     FigureData figureData;
    FigureServiceImpl figureService;
@@ -28,8 +30,8 @@ public class ImageFigureData extends Application {
 
 
     public void start(Stage primaryStage, String path) {
-
-        figureData.fillFigure(path);
+      // Метод в классе FigureData закомментирован, т.к. уже не используется
+      //  figureData.fillFigure(path);
     }
 
 
@@ -51,6 +53,8 @@ public class ImageFigureData extends Application {
         if (!latch.await(5L, TimeUnit.SECONDS))
             throw new ExceptionInInitializerError();
     }
+
+
 
 
 

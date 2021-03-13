@@ -10,14 +10,7 @@ import helper.FigureCreateHelper;
 import interfaces.IMovable;
 import interfaces.ITransformable;
 import interfaces.ITurnable;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.WritableImage;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class FigureData implements IMovable, ITurnable, ITransformable {
@@ -28,10 +21,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
     Coordinate centre;
     String description;
     String type;
-    String imageFigure;
-    String turnTempImageFigure;
-    String sizeTempImageFigure;
-    String moveTempImageFigure;
+
 
 
 
@@ -39,7 +29,6 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
         this.index = figure.getId();
         this.typeFigure = figure.getTypeFigure();
         this.coordinates = figure.getCoordinates();
-       // Collections.sort(coordinates,Coordinate.COMPARE_BY_XY);
         this.description = figure.toString();
         this.type = figure.getTypeFigure().getTitle();
         if (figure instanceof Circle) {
@@ -47,10 +36,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
             this.radius = circle.getRadius();
             this.centre = circle.getCentre();
         }
-        this.imageFigure="/img/figure " + figure.getId() + ".png";
-        this.turnTempImageFigure="/img/turnTempFigure " + figure.getId() + ".png?dummy=23423423423";
-        this.sizeTempImageFigure="/img/sizeTempFigure " + figure.getId() + ".png?dummy=23423423423";
-        this.moveTempImageFigure="/img/moveTempFigure " + figure.getId() + ".png?dummy=23423423423";
+
     }
 
     public int getID() {
@@ -82,7 +68,9 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
 
 
 
-    public void fillFigure(String pathName) {
+ /* Отрисовка с помощью canvas. Уже неактуально
+
+  public void fillFigure(String pathName) {
         String path = "C:\\Users\\Домовой\\IdeaProjects\\Task01\\src\\src\\main\\webapp\\img\\" + pathName;
         WritableImage image = getWritableImage();
         File file = new File(path);
@@ -114,7 +102,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
         }
         return canvas.snapshot(null,null);
     }
-
+*/
 
     public double getRadius() {
         return radius;
@@ -124,21 +112,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
         return centre;
     }
 
-    public String getImageFigure() {
-        return imageFigure;
-    }
 
-    public String getTurnTempImageFigure() {
-        return turnTempImageFigure;
-    }
-
-    public String getSizeTempImageFigure() {
-        return sizeTempImageFigure;
-    }
-
-    public String getMoveTempImageFigure() {
-        return moveTempImageFigure;
-    }
 
     @Override
     public void move(int distanceX, int distanceY) {
@@ -149,6 +123,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
         if (typeFigure==TypeFigure.Circle){
             Circle circle = (Circle) figure;
             this.radius =  circle.getRadius();
+            this.centre = circle.getCentre();
         }
 
     }
@@ -162,6 +137,7 @@ public class FigureData implements IMovable, ITurnable, ITransformable {
         if (typeFigure==TypeFigure.Circle){
             Circle circle = (Circle) figure;
             this.radius =  circle.getRadius();
+            this.centre = circle.getCentre();
         }
 
 

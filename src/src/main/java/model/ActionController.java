@@ -85,6 +85,8 @@ public class ActionController extends SelectorComposer<Window> {
 
     }
 
+
+
     private void extractedAll() {
         setModelAllCircle();
         chartCircle.setModel(circleModel);
@@ -111,31 +113,20 @@ public class ActionController extends SelectorComposer<Window> {
     }
 
     private void extractedSelect() {
+        extractedAll();
         if (selected.getTypeFigure()==TypeFigure.Circle){
-            chartCircle.setVisible(true);
             circleModel.clear();
             setModelCircle(selected);
             chartCircle.setModel(circleModel);
-            chartCircle.getYAxis().addPlotLine(plotLine);
-            Legend legendCircle = chartCircle.getLegend();
-            legendCircle.setLayout("vertical");
-            legendCircle.setAlign("right");
-            legendCircle.setVerticalAlign("middle");
-            legendCircle.setBorderWidth(0);
-            chartNotCircle.setVisible(false);
+            if (!chartCircle.isVisible()) chartCircle.setVisible(true);
+            if (chartNotCircle.isVisible()) chartNotCircle.setVisible(false);
         }
         else{
-            chartNotCircle.setVisible(true);
             lineModel.clear();
             setModelLine(selected);
             chartNotCircle.setModel(lineModel);
-            chartNotCircle.getYAxis().addPlotLine(plotLine);
-            Legend legendNotCircle = chartNotCircle.getLegend();
-            legendNotCircle.setLayout("vertical");
-            legendNotCircle.setAlign("right");
-            legendNotCircle.setVerticalAlign("middle");
-            legendNotCircle.setBorderWidth(0);
-            chartCircle.setVisible(false);
+            if (!chartNotCircle.isVisible()) chartNotCircle.setVisible(true);
+            if (chartCircle.isVisible()) chartCircle.setVisible(false);
         }
 
 
@@ -223,7 +214,7 @@ public class ActionController extends SelectorComposer<Window> {
     }
 
 
-/*
+/* Отрисовка с помощью canvas - уже неактуально
     private void setSrcFigureImage(String path) {
         ImageFigureData data = new ImageFigureData(selected);
         Platform.runLater(new Runnable() {
